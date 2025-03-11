@@ -29,8 +29,8 @@ jobs:
           
           mkdir -p releases
           cp target/release/dualmind releases/dualmind-$VERSION-x86_64-macos
-          cp .env.example releases/
-          cp README.md releases/
+          cp .env.example releases/dualmind-$VERSION-env-example
+          cp README.md releases/README-$VERSION.md
       
       - name: Build for macOS (ARM64)
         run: |
@@ -65,8 +65,6 @@ jobs:
           
           mkdir -p releases
           cp target/release/dualmind releases/dualmind-$VERSION-x86_64-linux
-          cp .env.example releases/
-          cp README.md releases/
       
       - name: Upload Linux x86_64 artifacts
         uses: actions/upload-artifact@v4
