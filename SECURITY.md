@@ -1,11 +1,5 @@
 # Security Policy
 
-## Reporting a Vulnerability
-
-If you discover a security vulnerability within DualMind, please send an email to [your-email@example.com](mailto:your-email@example.com). All security vulnerabilities will be promptly addressed.
-
-Please do not disclose security vulnerabilities publicly until they have been handled by the maintainers.
-
 ## Security Measures
 
 DualMind implements the following security measures:

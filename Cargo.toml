@@ -1,11 +1,11 @@
 [package]
 name = "dualmind"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
-authors = ["Your Name <your.email@example.com>"]
+authors = ["Ghayyem <ahrar@ghayyem.com>"]
 description = "DualMind - A versatile AI assistant with reasoning and crafting capabilities"
 readme = "README.md"
-repository = "https://github.com/yourusername/dualmind"
+repository = "https://github.com/ahrar-deriv/dualmind"
 license = "MIT"
 keywords = ["ai", "chat", "reasoning", "llm", "dual-phase"]
 categories = ["artificial-intelligence", "api-bindings", "command-line-utilities"]

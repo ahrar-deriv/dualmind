@@ -25,7 +25,7 @@ class ChatApp extends StatelessWidget {
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, _) {
         return MaterialApp(
-          title: 'R1Sonnet Chat',
+          title: 'DualMind Chat',
           theme: themeProvider.theme,
           home: const ChatScreen(),
         );
@@ -52,7 +52,7 @@ class ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('R1Sonnet Chat'),
+        title: const Text('DualMind Chat'),
         actions: [
           Consumer<ThemeProvider>(
             builder:

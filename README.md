@@ -17,8 +17,8 @@ DualMind is a versatile AI assistant designed to assist developers, researchers,
 - **OpenAI-Compatible API**: Works with any client that supports the OpenAI API format.
 - **Multiple LLM Provider Support**: Compatible with LiteLLM, OpenRouter, and other OpenAI-compatible APIs.
 
-![Terminal Interface](./assets/terminal-screenshot.png) <!-- Replace with actual screenshot -->
-![Flutter App](./assets/flutter-screenshot.png) <!-- Replace with actual screenshot -->
+![Terminal Interface](./assets/terminal-screenshot.png)
+![Flutter App](./assets/flutter-screenshot.png)
 
 ## Getting Started
 
