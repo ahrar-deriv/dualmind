@@ -1,6 +1,6 @@
 [package]
 name = "dualmind"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2024"
 authors = ["Ghayyem <ahrar@ghayyem.com>"]
 description = "DualMind - A versatile AI assistant with reasoning and crafting capabilities"
