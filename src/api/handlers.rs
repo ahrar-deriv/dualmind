@@ -92,22 +92,22 @@ pub async fn chat_completions(
         session_messages.push(message.clone());
     }
 
-    // Extract the latest user message
-    let user_message = match session_messages.iter().rev().find(|m| m.role == Role::User) {
-        Some(message) => &message.content,
-        None => {
-            return build_error_response(
-                StatusCode::BAD_REQUEST,
-                "At least one user message is required",
-                "invalid_request_error",
-            );
-        }
-    };
+    // Add debug logging to track the user content
+    println!("Debug - Request messages: {:?}", request.messages);
+
+    // Extract the last user message
+    let user_content = request.messages.iter()
+        .filter(|m| m.role == Role::User)
+        .last()
+        .map(|m| m.content.clone())
+        .unwrap_or_default();
+
+    println!("Debug - Extracted user content: '{}'", user_content);
 
     // Process with reasoning model first
     println!("API: Starting thinking phase with {}...", state.config.reasoning_model);
     let reasoning =
-        match process_reasoner_call(&state.client, &state.config, "").await {
+        match process_reasoner_call(&state.client, &state.config, &user_content).await {
             Ok(result) => {
                 println!("API: Thinking phase completed successfully");
                 result
@@ -123,7 +123,7 @@ pub async fn chat_completions(
         };
 
     // Check if this is a coding request
-    let is_coding = is_coding_request(user_message);
+    let is_coding = is_coding_request(&user_content);
 
     // Process with crafting model for final response
     if is_coding {
@@ -304,25 +304,21 @@ async fn handle_stream_processing(
         session_messages.push(message.clone());
     }
 
-    // Extract the latest user message
-    let user_message = match session_messages.iter().rev().find(|m| m.role == Role::User) {
-        Some(message) => &message.content,
-        None => {
-            let _ = tx.send(format!("data: {}\n\n", 
-                json!({
-                    "error": {
-                        "message": "At least one user message is required",
-                        "type": "invalid_request_error"
-                    }
-                }).to_string()
-            )).await;
-            return;
-        }
-    };
+    // Add debug logging to track the user content
+    println!("Debug - Request messages: {:?}", messages);
 
-    // Process with reasoning model first
+    // Extract the last user message
+    let user_content = messages.iter()
+        .filter(|m| m.role == Role::User)
+        .last()
+        .map(|m| m.content.clone())
+        .unwrap_or_default();
+
+    println!("Debug - Extracted user content: '{}'", user_content);
+
+    // Call the reasoning model
     println!("API: Starting thinking phase with {}...", config.reasoning_model);
-    let reasoning = match process_reasoner_call(&client, &config, "").await {
+    let reasoning = match process_reasoner_call(&client, &config, &user_content).await {
         Ok(result) => {
             println!("API: Thinking phase completed successfully");
             result
@@ -347,7 +343,7 @@ async fn handle_stream_processing(
     };
 
     // Check if this is a coding request
-    let is_coding = is_coding_request(user_message);
+    let is_coding = is_coding_request(&user_content);
 
     // Process with crafting model for final response
     if is_coding {

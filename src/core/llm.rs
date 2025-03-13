@@ -70,6 +70,18 @@ Your reasoning will be wrapped in <think></think> tags and will be used directly
         "stream": true
     });
 
+    // Log the messages being sent to the reasoning model
+    println!("\n=== MESSAGES SENT TO REASONING MODEL ===");
+    println!("Model: {}", config.reasoning_model);
+    for (i, message) in api_messages.iter().enumerate() {
+        let role = message["role"].as_str().unwrap_or("unknown");
+        let content = message["content"].as_str().unwrap_or("empty content");
+        println!("\nMessage {}: Role = {}", i+1, role);
+        println!("Content: {}", content);
+        println!("-----------------------------------");
+    }
+    println!("========================================\n");
+
     // Add debug logging to check the API key
     println!("Debug - API Key: {}", if api_key.is_empty() { "EMPTY" } else { "NOT EMPTY" });
     println!("Debug - API URL: {}", config.api_url);
@@ -377,8 +389,29 @@ async fn call_gemini_model(
 }
 
 /// Process reasoner call and handle errors
-pub async fn process_reasoner_call(client: &Client, config: &Config, _user_content: &str) -> Result<String, Box<dyn std::error::Error + Send + Sync>> {
-    match call_reasoner_with_context(client, &config.api_key, &[], config).await {
+pub async fn process_reasoner_call(client: &Client, config: &Config, user_content: &str) -> Result<String, Box<dyn std::error::Error + Send + Sync>> {
+    // Debug log to see what user_content contains
+    println!("\n=== DEBUG: USER CONTENT RECEIVED ===");
+    println!("Length: {}", user_content.len());
+    println!("Content: '{}'", user_content);
+    println!("===================================\n");
+    
+    // Create a message array with the user's content, ensuring it's not empty
+    let user_message = if user_content.trim().is_empty() {
+        "Hello, I need assistance.".to_string() // Default message if empty
+    } else {
+        user_content.to_string()
+    };
+    
+    let messages = vec![
+        Message {
+            role: Role::User,
+            content: user_message,
+        }
+    ];
+    
+    // Pass the messages to the reasoning model
+    match call_reasoner_with_context(client, &config.api_key, &messages, config).await {
         Ok(response) => Ok(response),
         Err(e) => Err(format!("Reasoning model error: {}", e).into()),
     }
